@@ -3,7 +3,7 @@ import mysql.connector
 from urllib.parse import urlparse
 
 def get_db_connection():
-    db_url = os.environ.get("DATABASE_URL")
+    db_url = os.environ.get("mysql://root:dGLbvILUaIrkstjmUPvNfHQhvAeyzTUk@mysql.railway.internal:3306/railway")
 
     if db_url:
         parsed = urlparse(db_url)
