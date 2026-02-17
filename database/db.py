@@ -3,7 +3,7 @@ import mysql.connector
 from urllib.parse import urlparse
 
 def get_db_connection():
-    db_url = os.environ.get("mysql://root:dGLbvILUaIrkstjmUPvNfHQhvAeyzTUk@mysql.railway.internal:3306/railway")
+    db_url = os.environ.get("DATABASE_URL")
 
     # If this is missing, the app will stop and tell you why in the Render logs
     if not db_url:
