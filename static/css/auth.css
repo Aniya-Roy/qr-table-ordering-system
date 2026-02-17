@@ -1,0 +1,135 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* ===== BACKGROUND ===== */
+.login-bg {
+    height: 100vh;
+    background: #230101;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px; /* ensure spacing on small screens */
+}
+
+/* ===== LOGIN / SIGNUP CARD ===== */
+.login-card {
+    background: rgba(0,0,0,0.75);
+    padding: 40px;
+    width: 350px;
+    max-width: 100%;
+    text-align: center;
+    border-radius: 10px;
+    color: white;
+    box-sizing: border-box;
+}
+
+.login-card h2 {
+    color: #d4af37;
+    letter-spacing: 2px;
+    font-size: 24px;
+}
+
+/* ===== INPUT FIELDS ===== */
+.login-card input,
+.login-card select {
+    width: 100%;
+    padding: 12px;
+    margin: 12px 0;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+/* ===== BUTTON ===== */
+.login-card button {
+    width: 100%;
+    padding: 12px;
+    background: #d4af37;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: 0.2s ease;
+}
+
+.login-card button:hover {
+    background: #bfa12d;
+}
+
+/* ===== MESSAGES ===== */
+.error-msg {
+    margin-top: 15px;
+    color: #ff6b6b;
+    font-size: 14px;
+}
+
+.success-msg {
+    margin-top: 15px;
+    color: #4cd137;
+    font-size: 14px;
+}
+
+/* ===== SIGNUP LINK ===== */
+.signup-link {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.signup-link a {
+    color: #d4af37;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* ===== MEDIA QUERIES ===== */
+
+/* Small tablets / large phones */
+@media (max-width: 768px) {
+    .login-card {
+        padding: 30px;
+        width: 100%;
+    }
+
+    .login-card h2 {
+        font-size: 22px;
+    }
+
+    .login-card button {
+        font-size: 15px;
+        padding: 10px;
+    }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+    .login-card {
+        padding: 25px 20px;
+    }
+
+    .login-card h2 {
+        font-size: 20px;
+    }
+
+    .login-card input,
+    .login-card select {
+        padding: 10px;
+    }
+
+    .login-card button {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .signup-link {
+        font-size: 13px;
+    }
+
+    .error-msg,
+    .success-msg {
+        font-size: 13px;
+    }
+}

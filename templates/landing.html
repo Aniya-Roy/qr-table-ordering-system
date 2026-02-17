@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LAZEEZ | Management Portal</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-dark py-3">
+    <div class="container">
+        <span class="navbar-brand brand">LAZEEZ</span>
+
+        <button class="btn btn-outline-light"
+                data-bs-toggle="modal"
+                data-bs-target="#loginModal">
+            Login
+        </button>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero text-center">
+    <div class="container">
+        <h1 class="display-5 fw-bold">Restaurant Operations Simplified</h1>
+        <p class="lead mt-3 text-light">
+            Manage orders, kitchen workflow, staff, and analytics — all in one powerful dashboard.
+        </p>
+
+        <button class="btn btn-light btn-lg mt-4"
+                data-bs-toggle="modal"
+                data-bs-target="#loginModal">
+            Access Dashboard
+        </button>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+    <div class="container">
+        <div class="row g-4 text-center">
+
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <h5>📊 Admin Dashboard</h5>
+                    <p >
+                        Monitor sales, manage menu, and control system settings efficiently.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <h5>👨‍🍳 Kitchen Panel</h5>
+                    <p>
+                        Real-time order updates and preparation tracking system.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <h5>👥 Staff Management</h5>
+                    <p>
+                        Role-based access control for smooth restaurant operations.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<footer class="text-center">
+    © 2026 LAZEEZ Restaurant Management Portal
+</footer>
+
+<!-- LOGIN MODAL -->
+<div class="modal fade" id="loginModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold">Login to Continue</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body px-4 pb-4">
+                <form method="POST" action="{{ url_for('auth.landing') }}">
+
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" name="username"
+                               class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input type="password" name="password"
+                               class="form-control" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-dark w-100">
+                        Login
+                    </button>
+                </form>
+
+                {% if error %}
+                <div class="alert alert-danger mt-3">
+                    {{ error }}
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if error %}
+<script>
+    var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+    loginModal.show();
+</script>
+{% endif %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Menu Management</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="page">
+
+  <button class="back-btn" onclick="location.href='/admin'">⬅ Back</button>
+
+  <h2>🍽 Menu Management</h2>
+
+  <!-- ADD ITEM -->
+  <form method="POST" action="/admin/menu/add" class="add-form">
+    <input type="text" name="name" placeholder="Item name" required>
+    <input type="number" name="price" placeholder="Price" required>
+
+    <select name="category" required>
+      <option value="">Category</option>
+      <option>Veg</option>
+      <option>Non-Veg</option>
+      <option>Drinks</option>
+      <option>Desserts</option>
+    </select>
+
+    <button type="submit">➕ Add Item</button>
+  </form>
+
+  <!-- MENU TABLE -->
+  <table class="table">
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Category</th>
+      <th>Price</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+
+    {% for item in items %}
+    <tr>
+      <td>{{ item.item_id }}</td>
+      <td>{{ item.name }}</td>
+      <td>{{ item.category }}</td>
+      <td>₹{{ item.price }}</td>
+      <td>
+        {% if item.is_available %}
+          <span class="active">Available</span>
+        {% else %}
+          <span class="inactive">Out of stock</span>
+        {% endif %}
+      </td>
+      <td class="action-buttons">
+        <a href="/admin/menu/edit/{{ item.item_id }}" class="btn btn-edit"> Edit</a>
+        <a href="/admin/menu/toggle/{{ item.item_id }}" class="btn btn-edit">
+          {% if item.is_available %}
+             Disable
+          {% else %}
+             Enable
+          {% endif %}
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+
+</div>
+
+</body>
+</html>

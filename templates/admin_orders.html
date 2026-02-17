@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Orders</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+  <style>
+    /* Date filter styling */
+    .date-filter {
+      margin: 20px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .date-filter input[type="date"] {
+      padding: 5px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    .date-filter button {
+      padding: 6px 12px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .date-filter button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <h2 class="logo">🍽 Admin</h2>
+
+    <nav>
+      <a href="{{ url_for('admin.admin_dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('admin.admin_orders') }}" class="active">Orders</a>
+      <a href="{{ url_for('menu.menu_dashboard') }}">Menu</a>
+      <a href="{{ url_for('staff.staff_dashboard') }}">Staff</a>
+      <a href="{{ url_for('kitchen.kitchen_orders') }}">Kitchen</a>
+    </nav>
+
+    <a href="{{ url_for('auth.logout') }}" class="logout">Logout</a>
+  </aside>
+  <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <!-- MAIN -->
+  <main class="main" id="main">
+
+    <header class="top">
+      <button class="hamburger" onclick="toggleSidebar()">☰</button>
+      <h1>Orders 📦</h1>
+      <p>Track and manage all customer orders</p>
+    </header>
+
+    <!-- DATE FILTER -->
+    <section class="date-filter">
+      <form method="GET" action="{{ url_for('admin.admin_orders') }}">
+        <label for="order_date">Select Date:</label>
+        <input type="date" id="order_date" name="order_date" value="{{ selected_date }}">
+        <button type="submit">Filter</button>
+      </form>
+    </section>
+
+    <!-- ORDERS TABLE -->
+    <section class="orders-table">
+
+      <div class="orders-header">
+        <h3>Orders</h3>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Table</th>
+            <th>Status</th>
+            <th>Total</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for order in orders %}
+          <tr>
+            <td>#{{ order.order_id }}</td>
+            <td>Table {{ order.table_number }}</td>
+            <td>
+              <span class="status {{ order.status|lower }}">
+                {{ order.status }}
+              </span>
+            </td>
+            <td>₹ {{ order.total_price }}</td>
+            <td>{{ order.order_time }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+    </section>
+
+  </main>
+</div>
+
+<script>
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('main').classList.toggle('shift');
+  document.getElementById('overlay').classList.toggle('show');
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('main').classList.remove('shift');
+  document.getElementById('overlay').classList.remove('show');
+}
+</script>
+
+</body>
+</html>

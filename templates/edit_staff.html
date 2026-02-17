@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edit Staff</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/edit_staff.css') }}">
+</head>
+
+<body>
+
+<div class="staff-wrapper">
+
+  <div class="staff-card">
+
+    
+
+    <h2>Edit Staff</h2>
+
+    <form method="POST" action="/admin/staff/edit/{{ staff.staff_id }}">
+
+      <!-- Name -->
+      <div class="form-group">
+        <label>Full Name</label>
+        <input
+          type="text"
+          name="name"
+          value="{{ staff.name }}"
+          required
+        >
+      </div>
+
+      <!-- Phone -->
+      <div class="form-group">
+        <label>Phone</label>
+        <input
+          type="text"
+          name="phone"
+          value="{{ staff.phone }}"
+          required
+        >
+      </div>
+
+      <!-- Role -->
+      <div class="form-group">
+        <label>Role</label>
+        <select name="role" required>
+          <option value="Admin" {{ 'selected' if staff.role == 'Admin' }}>Admin</option>
+          <option value="Kitchen" {{ 'selected' if staff.role == 'Kitchen' }}>Kitchen</option>
+          <option value="Waiter" {{ 'selected' if staff.role == 'Waiter' }}>Waiter</option>
+        </select>
+      </div>
+
+      <!-- Status -->
+      <div class="form-group">
+        <label>Status</label>
+        <select name="status" required>
+          <option value="active" {{ 'selected' if staff.status == 'active' }}>Active</option>
+          <option value="inactive" {{ 'selected' if staff.status == 'inactive' }}>Inactive</option>
+        </select>
+      </div>
+
+      <!-- Actions -->
+      <div class="staff-actions">
+        <a href="/admin/staff" class="btn cancel">Cancel</a>
+        <button type="submit" class="btn save">💾 Update Staff</button>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,129 @@
+/* ===== EDIT STAFF PAGE ===== */
+.staff-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px; /* added horizontal padding for smaller screens */
+}
+
+.staff-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 480px;
+  border-radius: 16px;
+  padding: 30px 20px; /* reduce horizontal padding for mobile */
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  animation: fadeUp 0.4s ease;
+  box-sizing: border-box;
+}
+
+/* TITLE */
+.staff-card h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: 600;
+  color: #111827;
+  text-align: center;
+}
+
+/* FORM GROUP */
+.staff-card .form-group {
+  margin-bottom: 18px;
+}
+
+.staff-card label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.staff-card input,
+.staff-card select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  transition: all 0.25s ease;
+  box-sizing: border-box;
+}
+
+.staff-card input:focus,
+.staff-card select:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  outline: none;
+}
+
+/* ACTION BUTTONS */
+.staff-actions {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap; /* allows buttons to stack on mobile */
+  gap: 10px;       /* spacing when wrapped */
+  margin-top: 25px;
+}
+
+.btn {
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.25s ease;
+  text-decoration: none;
+  text-align: center;
+  flex: 1; /* buttons expand equally on small screens */
+  box-sizing: border-box;
+}
+
+/* UPDATE BUTTON */
+.btn.save {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #ffffff;
+}
+
+.btn.save:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(79, 70, 229, 0.3);
+}
+
+/* BACK BUTTON */
+.btn.cancel {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.btn.cancel:hover {
+  background: #e5e7eb;
+}
+
+/* ANIMATION */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== MEDIA QUERIES ===== */
+@media (max-width: 480px) {
+  .staff-card {
+    padding: 20px 15px;
+  }
+
+  .btn {
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .staff-actions {
+    flex-direction: column; /* stack buttons vertically */
+  }
+}

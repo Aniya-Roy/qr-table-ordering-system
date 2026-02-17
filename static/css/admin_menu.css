@@ -1,0 +1,287 @@
+/* ===== CARD VARIABLES ===== */
+:root {
+  --gold: #fbbf24;
+  --burgundy: #800020;
+}
+
+/* ===== MENU / ADMIN CARDS ===== */
+.menu-card {
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+  margin: 15px;
+}
+
+/* IMAGE */
+.menu-card img,
+.menu-img {
+  width: 100%;
+  height: auto;
+  max-height: 250px;
+  object-fit: cover;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+  display: block;
+}
+
+/* CARD BODY */
+.menu-card .card-body {
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* CARD TITLE */
+.menu-card h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #111;
+}
+
+/* PRICE / STATUS */
+.menu-card .price {
+  font-weight: 600;
+  color: var(--burgundy);
+  margin-bottom: 10px;
+}
+
+.menu-card .status {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* BUTTONS */
+.menu-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.menu-actions .btn {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+  border: none;
+  text-decoration: none;
+}
+
+.menu-actions .edit { background: #2563eb; color: #fff; }
+.menu-actions .edit:hover { background: #1e40af; }
+.menu-actions .toggle { background: #facc15; color: #000; }
+.menu-actions .toggle:hover { background: #eab308; }
+.menu-actions .delete { background: #c0392b; color: white; }
+.menu-actions .delete:hover { background: #a93226; }
+
+/* ADD MENU BUTTON */
+.add-menu-btn {
+  background-color: var(--gold);
+  color: #090101;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: inline-block;
+}
+
+.add-menu-btn:hover {
+  background-color: var(--burgundy);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(128, 0, 32, 0.35);
+}
+
+.add-menu-btn:active { transform: scale(0.98); }
+
+/* CARD HOVER EFFECT */
+.menu-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+/* ===== MODAL OVERLAY ===== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+}
+
+.modal-overlay.show { display: flex; }
+
+/* ===== MODAL BOX ===== */
+.modal-box {
+  background: #fff;
+  width: 100%;
+  max-width: 500px;
+  padding: 30px;
+  border-radius: 18px;
+  position: relative;
+  animation: fadeIn 0.3s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+  z-index: 3100;
+}
+
+/* CLOSE BUTTON */
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #800020;
+}
+
+/* FORM ELEMENTS */
+.modal-box label {
+  display: block;
+  margin-top: 12px;
+  font-weight: 500;
+  color: #111;
+}
+
+.modal-box input[type="text"],
+.modal-box input[type="number"],
+.modal-box input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  font-size: 15px;
+  transition: 0.2s ease;
+}
+
+.modal-box input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+}
+
+/* CHECKBOXES */
+.checkbox-label {
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* MODAL BUTTONS */
+.modal-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modal-buttons .btn {
+  padding: 10px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  border: none;
+  background-color: var(--gold);
+  color: #090101;
+  transition: all 0.25s ease;
+}
+
+.modal-buttons .btn:hover {
+  background-color: var(--burgundy);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(128,0,32,0.35);
+}
+
+.modal-buttons .btn.cancel {
+  background-color: #e5e7eb;
+  color: #111;
+}
+
+.modal-buttons .btn.cancel:hover {
+  background-color: #d1d5db;
+}
+
+/* MODAL ANIMATION */
+@keyframes fadeIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ===== MEDIA QUERIES ===== */
+@media (max-width: 1024px) {
+  .menu-card {
+    max-width: 240px;
+    margin: 12px;
+  }
+  .menu-card img,
+  .menu-img {
+    max-height: 200px;
+  }
+  .add-menu-btn {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .menu-card {
+    max-width: 48%;
+    margin: 8px 1%;
+  }
+  .menu-card img,
+  .menu-img {
+    max-height: 160px;
+  }
+  .menu-actions .btn,
+  .add-menu-btn {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+  .modal-box {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .menu-card {
+    max-width: 100%;
+    margin: 8px 0;
+  }
+  .menu-card img,
+  .menu-img {
+    max-height: 120px;
+  }
+  .menu-actions .btn,
+  .add-menu-btn {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+  }
+  .modal-box {
+    width: 90%;
+    padding: 15px;
+  }
+}

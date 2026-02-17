@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LAZEEZ Menu</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/user_menu.css') }}">
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="top-bar text-center py-4">
+  <h1 class="brand">🍽 LAZEEZ</h1>
+  <p class="table-text">Table {{ table_id }}</p>
+</header>
+
+<div class="container py-4">
+  {% if active_order %}
+<div class="active-order-box mb-4 p-3 shadow-sm rounded">
+
+  <h4 class="mb-3">Your Current Order</h4>
+
+  <p>
+    Status:
+    {% if active_order.status == 'pending' %}
+      <span class="badge bg-warning">Pending</span>
+    {% elif active_order.status == 'preparing' %}
+      <span class="badge bg-info">Preparing</span>
+    {% elif active_order.status == 'completed' %}
+      <span class="badge bg-success">Completed</span>
+    {% endif %}
+  </p>
+
+  <hr>
+
+  {% for item in active_items %}
+  <div class="d-flex justify-content-between align-items-center mb-2">
+
+    <div>
+      <strong>{{ item.name }}</strong> × {{ item.quantity }}
+      <br>
+      ₹ {{ item.price * item.quantity }}
+    </div>
+
+    <div>
+      {% if item.status == 'pending' %}
+<form method="POST"
+      action="{{ url_for('user.cancel_item', item_id=item.id) }}">
+    <button type="submit" class="btn btn-sm btn-danger">
+        Cancel
+    </button>
+</form>
+{% else %}
+    <span class="badge bg-secondary">
+        {{ item.status.capitalize() }}
+    </span>
+{% endif %}
+
+    </div>
+
+  </div>
+  {% endfor %}
+
+</div>
+{% endif %}
+
+
+  <!-- CATEGORY TABS -->
+  <ul class="nav nav-pills justify-content-center mb-4">
+    {% for category in menu_by_category.keys() %}
+      <li class="nav-item">
+        <button class="nav-link category-btn"
+                onclick="showCategory('{{ category }}')">
+          {{ category }}
+        </button>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <!-- MENU -->
+  {% for category, items in menu_by_category.items() %}
+  <section class="category-section" id="cat-{{ category }}">
+    <h3 class="section-title mb-4">{{ category }}</h3>
+
+    <div class="row g-4">
+      {% for item in items %}
+      <div class="col-lg-3 col-md-4 col-sm-6">
+
+        <div class="menu-card">
+
+          <div class="img-wrapper">
+            <img 
+              src="{{ url_for('static', filename='images/' + item.image) }}" 
+              alt="{{ item.name }}"
+              onerror="this.src='{{ url_for('static', filename='images/default_food.jpg') }}'"
+            >
+          </div>
+
+          <div class="menu-content">
+            <h5>{{ item.name }}</h5>
+            <p class="price">₹ {{ item.price }}</p>
+
+            <div class="qty-control">
+              <button class="qty-btn" onclick="decreaseQty({{ item.item_id }})">−</button>
+              <span id="qty-{{ item.item_id }}">0</span>
+              <button class="qty-btn"
+                      onclick="increaseQty({{ item.item_id }}, '{{ item.name }}', {{ item.price }})">
+                +
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endfor %}
+
+</div>
+
+<!-- CART BAR -->
+<div class="cart-bar">
+  
+  <!-- Cart Details -->
+  <div class="cart-details" id="cartItemsPreview">
+    <!-- Items will appear here -->
+  </div>
+
+  <div class="cart-summary">
+    <strong id="cart-count">0 items</strong>
+    <strong id="cart-total">₹ 0</strong>
+  </div>
+
+  <button type="button" class="order-btn" onclick="openOrderModal()">
+    Place Order
+  </button>
+
+  <!-- Hidden Form -->
+  <form method="POST" action="{{ url_for('user.place_order') }}" id="orderForm">
+    <input type="hidden" name="table_id" value="{{ table_id }}">
+    <input type="hidden" name="cart_data" id="cartData">
+  </form>
+
+</div>
+
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+let cart = [];
+
+/* CATEGORY SWITCH */
+function showCategory(category) {
+  document.querySelectorAll('.category-section')
+    .forEach(sec => sec.style.display = "none");
+
+  document.getElementById("cat-" + category).style.display = "block";
+
+  document.querySelectorAll('.category-btn')
+    .forEach(btn => btn.classList.remove("active"));
+
+  event.target.classList.add("active");
+}
+
+/* SHOW FIRST CATEGORY */
+const firstCategory = document.querySelector('.category-section');
+if (firstCategory) {
+  showCategory(firstCategory.id.replace("cat-", ""));
+}
+
+/* ADD ITEM */
+function increaseQty(id, name, price) {
+  let item = cart.find(i => i.item_id === id);
+
+  if (!item) {
+    item = { item_id: id, name, price, quantity: 0 };
+    cart.push(item);
+  }
+
+  item.quantity++;
+  document.getElementById("qty-" + id).innerText = item.quantity;
+  updateCart();
+}
+
+/* DECREASE ITEM */
+function decreaseQty(id) {
+  let item = cart.find(i => i.item_id === id);
+  if (!item) return;
+
+  item.quantity--;
+
+  if (item.quantity <= 0) {
+    cart = cart.filter(i => i.item_id !== id);
+    document.getElementById("qty-" + id).innerText = 0;
+  } else {
+    document.getElementById("qty-" + id).innerText = item.quantity;
+  }
+
+  updateCart();
+}
+
+/* REMOVE FROM CART DIRECTLY */
+function removeFromCart(id) {
+  cart = cart.filter(i => i.item_id !== id);
+  document.getElementById("qty-" + id).innerText = 0;
+  updateCart();
+}
+
+/* UPDATE CART */
+function updateCart() {
+  let totalItems = 0;
+  let totalPrice = 0;
+  let previewHTML = "";
+
+  cart.forEach(i => {
+    totalItems += i.quantity;
+    totalPrice += i.quantity * i.price;
+
+    previewHTML += `
+      <div class="cart-preview-item">
+        <div class="cart-left">
+          <span class="cart-name">${i.name}</span>
+          <small>₹ ${i.price} × ${i.quantity}</small>
+        </div>
+
+        <div class="cart-right">
+          <span class="cart-item-total">₹ ${i.quantity * i.price}</span>
+          <button class="remove-btn" onclick="removeFromCart(${i.item_id})">−</button>
+        </div>
+      </div>
+    `;
+  });
+
+  document.getElementById("cart-count").innerText = totalItems + " items";
+  document.getElementById("cart-total").innerText = "₹ " + totalPrice;
+  document.getElementById("cartItemsPreview").innerHTML = previewHTML;
+  document.getElementById("cartData").value = JSON.stringify(cart);
+}
+
+/* MODAL */
+function openOrderModal() {
+  if (cart.length === 0) {
+    alert("Your cart is empty!");
+    return;
+  }
+
+  let modalItems = "";
+  let totalPrice = 0;
+
+  cart.forEach(i => {
+    totalPrice += i.quantity * i.price;
+
+    modalItems += `
+      <div class="modal-item">
+        <span>${i.name} × ${i.quantity}</span>
+        <span>₹ ${i.quantity * i.price}</span>
+      </div>
+    `;
+  });
+
+  document.getElementById("modalOrderItems").innerHTML = modalItems;
+  document.getElementById("modalTotal").innerText = "₹ " + totalPrice;
+
+  document.getElementById("orderModal").style.display = "flex";
+}
+
+function closeOrderModal() {
+  document.getElementById("orderModal").style.display = "none";
+}
+
+function submitOrder() {
+
+  document.getElementById("orderModal").style.display = "none";
+  document.getElementById("successModal").style.display = "flex";
+
+  setTimeout(() => {
+
+    // Submit to backend
+    document.getElementById("orderForm").submit();
+
+    // Clear cart visually
+    cart.forEach(i => {
+      document.getElementById("qty-" + i.item_id).innerText = 0;
+    });
+
+    cart = [];
+    updateCart();
+
+    // Close success modal
+    document.getElementById("successModal").style.display = "none";
+
+  }, 2500);
+}
+
+
+
+
+</script>
+
+<!-- ORDER MODAL -->
+<div id="orderModal" class="order-modal">
+  <div class="order-modal-content">
+
+    <div class="checkmark">✔</div>
+    <h2>Confirm Your Order</h2>
+    <p class="sub">Table {{ table_id }}</p>
+
+    <div id="modalOrderItems"></div>
+
+    <div class="modal-total">
+      <span>Total</span>
+      <strong id="modalTotal">₹ 0</strong>
+    </div>
+
+    <div class="modal-buttons">
+      <button onclick="closeOrderModal()" class="cancel-btn">Cancel</button>
+      <button onclick="submitOrder()" class="confirm-btn">Confirm Order</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div id="successModal" class="order-modal">
+  <div class="order-modal-content success-box">
+
+    <div class="success-icon">🎉</div>
+
+    <h2>Order Placed!</h2>
+    <p class="success-text">Your order is on the way 🍽</p>
+    <p class="success-sub">Thank you for ordering with LAZEEZ</p>
+
+  </div>
+</div>
+
+</body>
+</html>

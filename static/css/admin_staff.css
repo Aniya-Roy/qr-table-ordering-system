@@ -1,0 +1,171 @@
+/* Cards */
+.card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 14px;
+  margin-bottom: 24px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+}
+
+/* Form */
+.staff-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.staff-form input,
+.staff-form select {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.staff-form button {
+  grid-column: span 3;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+/* Table */
+.staff-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow-x: auto;
+  display: block;
+}
+
+.staff-table th {
+  background: #f5f6fa;
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.staff-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  font-size: 13px;
+}
+
+/* Status badges */
+.badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge.active {
+  background: #e6f9ee;
+  color: #1b8f4d;
+}
+
+.badge.inactive {
+  background: #fdecea;
+  color: #c0392b;
+}
+
+/* Buttons */
+.btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  text-decoration: none;
+  color: white;
+  margin-right: 6px;
+}
+
+.btn.small { 
+  background: #f39c12;
+  font-size: 12px;
+}
+
+.btn-primary {
+  background: #111827;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn.warning { background: #f39c12; }
+.btn.danger { background: #e74c3c; }
+
+/* ===== MEDIA QUERIES ===== */
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .staff-form {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+
+  .staff-form button {
+    grid-column: span 2;
+    font-size: 13px;
+    padding: 10px 16px;
+  }
+
+  .staff-table th,
+  .staff-table td {
+    font-size: 12px;
+    padding: 10px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .staff-form {
+    grid-template-columns: 1fr;
+  }
+
+  .staff-form button {
+    grid-column: span 1;
+    width: 100%;
+    padding: 10px;
+    font-size: 12px;
+  }
+
+  .staff-table {
+    font-size: 12px;
+  }
+
+  .btn,
+  .btn.small {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+
+  .badge {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+}
+
+/* Extra small mobile */
+@media (max-width: 480px) {
+  .card {
+    padding: 15px;
+    margin-bottom: 16px;
+  }
+
+  .staff-table th,
+  .staff-table td {
+    padding: 8px;
+  }
+
+  .btn,
+  .btn.small,
+  .btn-primary {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+
+  .badge {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+}

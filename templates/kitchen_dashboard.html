@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kitchen Dashboard</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/kitchen_dashboard.css') }}">
+</head>
+<body>
+
+<div class="dashboard">
+
+  {% if role == "admin" %}
+  <aside class="sidebar" id="sidebar">
+    <h2 class="logo">🍽 Admin</h2>
+
+    <nav>
+      <a href="{{ url_for('admin.admin_dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('admin.admin_orders') }}">Orders</a>
+      <a href="{{ url_for('menu.menu_dashboard') }}">Menu</a>
+      <a href="{{ url_for('staff.staff_dashboard') }}">Staff</a>
+      <a href="{{ url_for('kitchen.kitchen_orders') }}" class="active">Kitchen</a>
+    </nav>
+
+    <a href="{{ url_for('auth.logout') }}" class="logout">Logout</a>
+  </aside>
+
+  <div class="overlay" id="overlay"></div>
+  {% endif %}
+
+  <main class="main" id="main">
+
+    <header class="top">
+      {% if role == "admin" %}
+      <button class="hamburger" id="hamburger">☰</button>
+      {% endif %}
+
+      <div class="header-left">
+        <h1>Live Orders</h1>
+        <p>Prepare and manage incoming orders</p>
+      </div>
+
+      <div class="header-right">
+        <a href="{{ url_for('auth.logout') }}" class="logout-btn">Logout</a>
+      </div>
+    </header>
+
+    <!-- LIVE ORDERS -->
+    <section class="orders-grid">
+      {% if live_orders %}
+        {% for o in live_orders %}
+        <div class="order-card">
+          <div class="order-header">
+            <h3>Table {{ o.table_number }}</h3>
+            <span class="badge {{ o.status }}">{{ o.status }}</span>
+          </div>
+
+          <ul class="items-list">
+            {% for item in o['items'] %}
+              <li class="{% if item.status == 'cancelled' %}cancelled{% endif %}">
+                {{ item.name }} x{{ item.quantity }}
+                {% if item.status == 'cancelled' %}
+                  <span class="cancel-badge">CANCELLED</span>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+
+          <p class="time">🕒 {{ o.order_time }}</p>
+
+          <div class="actions">
+            {% if o.status|lower == 'pending' %}
+              <button class="status-btn"
+                      data-id="{{ o.order_id }}"
+                      data-status="preparing">
+                Start
+              </button>
+
+            {% elif o.status|lower == 'preparing' %}
+              <button class="status-btn success"
+                      data-id="{{ o.order_id }}"
+                      data-status="completed">
+                Complete
+              </button>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p class="empty">No live orders 🚀</p>
+      {% endif %}
+    </section>
+
+    <!-- COMPLETED ORDERS -->
+    <h2 class="section-title">Completed Orders</h2>
+
+    <section class="orders-grid completed">
+      {% for o in completed_orders %}
+      <div class="order-card done">
+        <h3>Table {{ o.table_number }}</h3>
+        <p class="items">{{ o['items'] }}</p>
+      </div>
+      {% endfor %}
+    </section>
+
+  </main>
+</div>
+
+<!-- SIDEBAR LOGIC -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
+  const main = document.getElementById("main");
+  const hamburger = document.getElementById("hamburger");
+
+  hamburger?.addEventListener("click", () => {
+    sidebar.classList.toggle("open");
+    main.classList.toggle("shift");
+    overlay.classList.toggle("show");
+  });
+
+  overlay?.addEventListener("click", () => {
+    sidebar.classList.remove("open");
+    main.classList.remove("shift");
+    overlay.classList.remove("show");
+  });
+
+  // ✅ ORDER STATUS UPDATE (THE FIX)
+  document.querySelectorAll(".status-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const orderId = btn.dataset.id;
+      const status = btn.dataset.status;
+
+      fetch("/kitchen/order/update", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `order_id=${orderId}&status=${status}`
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("Update failed");
+        location.reload();
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Failed to update order");
+      });
+    });
+  });
+});
+</script>
+
+</body>
+</html>

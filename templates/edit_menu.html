@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Menu</title>
+
+  <!-- Admin layout -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/edit_menu.css') }}">
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2 class="logo">🍽 Admin</h2>
+
+    <nav>
+      <a href="{{ url_for('admin.admin_dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('admin.admin_orders') }}">Orders</a>
+      <a href="{{ url_for('menu.menu_dashboard') }}" class="active">Menu</a>
+      <a href="{{ url_for('staff.staff_dashboard') }}">Staff</a>
+      <a href="{{ url_for('kitchen.kitchen_orders') }}">Kitchen</a>
+    </nav>
+
+    <a href="{{ url_for('auth.logout') }}" class="logout">Logout</a>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <header class="top">
+      <h1>Edit Menu Item</h1>
+      <p>Update food details</p>
+    </header>
+
+    <!-- EDIT FORM -->
+    <div class="edit-wrapper">
+      <div class="edit-card">
+
+        <form method="POST" action="/admin/menu/update">
+          <input type="hidden" name="item_id" value="{{ item.item_id }}">
+
+          <div class="form-group">
+            <label>Item Name</label>
+            <input type="text" name="name" value="{{ item.name }}" required>
+          </div>
+
+          <div class="form-group">
+            <label>Price (₹)</label>
+            <input type="number" name="price" value="{{ item.price }}" required>
+          </div>
+
+          <div class="form-group">
+            <label>Category</label>
+            <select name="category" required>
+              <option value="Veg" {{ 'selected' if item.category=='Veg' }}>Veg</option>
+              <option value="Non-Veg" {{ 'selected' if item.category=='Non-Veg' }}>Non-Veg</option>
+              <option value="Drinks" {{ 'selected' if item.category=='Drinks' }}>Drinks</option>
+              <option value="Desserts" {{ 'selected' if item.category=='Desserts' }}>Desserts</option>
+            </select>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn save">💾 Save Changes</button>
+            <a href="{{ url_for('menu.menu_dashboard') }}" class="btn cancel">Cancel</a>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

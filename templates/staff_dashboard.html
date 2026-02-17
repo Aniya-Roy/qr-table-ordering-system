@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Staff Management</title>
+
+  <!-- Admin layout -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+
+  <!-- Staff specific -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_staff.css') }}">
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- SIDEBAR (INLINE – SAME AS MENU) -->
+  <aside class="sidebar" id="sidebar">
+    <h2 class="logo">🍽 Admin</h2>
+
+    <nav>
+      <a href="{{ url_for('admin.admin_dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('admin.admin_orders') }}">Orders</a>
+      <a href="{{ url_for('menu.menu_dashboard') }}">Menu</a>
+      <a href="{{ url_for('staff.staff_dashboard') }}" class="active">Staff</a>
+      <a href="{{ url_for('kitchen.kitchen_orders') }}">Kitchen</a>
+    </nav>
+
+    <a href="{{ url_for('auth.logout') }}" class="logout">Logout</a>
+  </aside>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <!-- MAIN CONTENT -->
+  <main class="main" id="main">
+    <button class="hamburger" onclick="toggleSidebar()">☰</button>
+
+    <header class="top">
+      <h1>👥 Staff Management</h1>
+      <p>Manage staff roles and access</p>
+    </header>
+
+    <!-- ADD STAFF -->
+    <section class="card">
+      <h3>Add Staff</h3>
+
+      <form method="POST" action="/admin/staff/add" class="staff-form">
+        <input type="text" name="name" placeholder="Staff Name" required>
+        <input type="text" name="phone" placeholder="Phone Number" required>
+
+        <select name="role" required>
+          <option value="">Select Role</option>
+          <option value="Admin">Admin</option>
+          <option value="Kitchen">Kitchen</option>
+          <option value="Waiter">Waiter</option>
+        </select>
+
+        <button type="submit" class="btn-primary">➕ Add Staff</button>
+      </form>
+    </section>
+
+    <!-- STAFF LIST -->
+    <section class="card">
+      <table class="staff-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Phone</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for s in staff %}
+          <tr>
+            <td>{{ s.name }}</td>
+            <td>{{ s.role }}</td>
+            <td>{{ s.phone }}</td>
+            <td>
+              <span class="badge {{ 'active' if s.status.lower() == 'active' else 'inactive' }}">
+                {{ s.status }}
+              </span>
+            </td>
+            <td class="actions">
+              <a href="/admin/staff/edit/{{ s.staff_id }}" class="btn small">Edit</a>
+              <a href="/admin/staff/toggle/{{ s.staff_id }}" class="btn small warning">
+                {{ 'Deactivate' if s.status.lower() == 'active' else 'Activate' }}
+              </a>
+              <a href="/admin/staff/delete/{{ s.staff_id }}"
+                 class="btn small danger"
+                 onclick="return confirm('Delete this staff member?')">
+                Delete
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+</div>
+
+<script>
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('main').classList.toggle('shift');
+  document.getElementById('overlay').classList.toggle('show');
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('main').classList.remove('shift');
+  document.getElementById('overlay').classList.remove('show');
+}
+</script>
+</body>
+</html>

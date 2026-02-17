@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Menu</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_menu.css') }}">
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <h2 class="logo">🍽 Admin</h2>
+
+    <nav>
+      <a href="{{ url_for('admin.admin_dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('admin.admin_orders') }}">Orders</a>
+      <a href="{{ url_for('menu.menu_dashboard') }}" class="active">Menu</a>
+      <a href="{{ url_for('staff.staff_dashboard') }}">Staff</a>
+      <a href="{{ url_for('kitchen.kitchen_orders') }}">Kitchen</a>
+    </nav>
+
+    <a href="{{ url_for('auth.logout') }}" class="logout">Logout</a>
+  </aside>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <!-- MAIN -->
+  <main class="main" id="main">
+
+    <header class="top">
+        <button class="hamburger" onclick="toggleSidebar()">☰</button>
+      <h1>Menu 🍔</h1>
+      <p>Manage food items available for ordering</p>
+      <button class="add-menu-btn" onclick="openMenuModal()">
+        Add Menu
+      </button>
+
+
+    </header>
+
+    <!-- MENU GRID -->
+    <section class="menu-grid">
+
+      {% for item in items %}
+      <div class="menu-card">
+
+  <!-- IMAGE -->
+  {% if item.image %}
+    <img src="{{ url_for('static', filename='images/' + item.image) }}" 
+         alt="{{ item.name }}" 
+         class="menu-img">
+  {% else %}
+    <img src="{{ url_for('static', filename='images/') }}" 
+         alt="No Image" 
+         class="menu-img">
+  {% endif %}
+
+
+
+
+        <div class="menu-info">
+          <h3>{{ item.name }}</h3>
+          <p class="category">{{ item.category }}</p>
+          <p class="price">₹ {{ item.price }}</p>
+
+          <!-- Status Badge -->
+          <span class="status {{ 'available' if item.is_available else 'unavailable' }}">
+            {{ 'Available' if item.is_available else 'Unavailable' }}
+          </span>
+
+          <!-- Edit / Toggle Buttons -->
+          <div class="menu-actions">
+            <a href="{{ url_for('menu.edit_menu', item_id=item.item_id) }}" class="btn edit">Edit</a>
+            <a href="{{ url_for('menu.toggle_menu', item_id=item.item_id) }}" class="btn toggle">
+              {{ 'Disable' if item.is_available else 'Enable' }}
+            </a>
+            <form action="{{ url_for('menu.delete_menu', item_id=item.item_id) }}" 
+            method="POST" 
+            onsubmit="return confirm('Are you sure you want to delete this item permanently?');"
+            style="display:inline;">
+            <button type="submit" class="btn delete">Delete</button>
+          </form>
+
+          </div>
+
+        </div>
+
+      </div>
+      {% endfor %}
+
+    </section>
+
+  </main>
+</div>
+<script>
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('main').classList.toggle('shift');
+  document.getElementById('overlay').classList.toggle('show');
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('main').classList.remove('shift');
+  document.getElementById('overlay').classList.remove('show');
+}
+</script>
+
+<!-- ADD MENU MODAL -->
+<div class="modal-overlay" id="menuModal">
+
+  <div class="modal-box">
+    <span class="close-btn" onclick="closeMenuModal()">×</span>
+
+    <h1>Add Menu Item 🍔</h1>
+
+    <form method="POST"
+          action="{{ url_for('menu.add_menu') }}"
+          enctype="multipart/form-data">
+
+      <label>Name:</label>
+      <input type="text" name="name" required>
+
+      <label>Price:</label>
+      <input type="number" step="0.01" name="price" required>
+
+      <label>Category:</label>
+      <input type="text" name="category" required>
+
+      <label>Upload Image:</label>
+      <input type="file" name="image" accept="image/*" required>
+
+      <label class="checkbox-label">
+        <input type="checkbox" name="is_available" checked>
+        Available
+      </label>
+
+      <div class="modal-buttons">
+        <button type="submit" class="btn">Add Item</button>
+        <button type="button" class="btn cancel" onclick="closeMenuModal()">
+          Cancel
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<script>
+function openMenuModal() {
+  document.getElementById("menuModal").classList.add("show");
+}
+
+function closeMenuModal() {
+  document.getElementById("menuModal").classList.remove("show");
+}
+
+/* Close when clicking outside */
+window.onclick = function(event) {
+  const modal = document.getElementById("menuModal");
+  if (event.target === modal) {
+    modal.classList.remove("show");
+  }
+}
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Admin System{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="d-flex">
+        <div class="bg-dark text-white p-3" style="width: 250px; min-height: 100vh;">
+            <h3>Admin</h3>
+            <ul class="nav flex-column">
+                <li class="nav-item"><a href="/admin" class="nav-link text-white">Dashboard</a></li>
+                <li class="nav-item"><a href="/orders" class="nav-link text-white">Orders</a></li>
+                <li class="nav-item"><a href="/menu" class="nav-link text-white">Menu</a></li>
+            </ul>
+            <a href="/logout" class="btn btn-danger mt-5 w-100">Logout</a>
+        </div>
+
+        <div class="flex-grow-1 p-4">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+</body>
+</html>
